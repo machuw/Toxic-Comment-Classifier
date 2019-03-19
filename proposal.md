@@ -1,6 +1,7 @@
 # Machine Learning Engineer Nanodegree
 ## Capstone Proposal
 Yuanchao Ma
+
 March 20, 2019
 ## Proposal
 ### Domain Background
