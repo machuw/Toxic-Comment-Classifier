@@ -15,6 +15,15 @@ March 20, 2019
 Toxic Comment Classification Challenge是kaggle上由Jigsaw提出的一个比赛，旨在找到更好的对恶毒评论的多分类模型。我通过参加这个比赛，使用比赛提供的人工标注的Wikipedia评论数据，训练一个能够在任意文本数据上判断多种恶意（威胁，色情，侮辱和种族歧视言论等）分类概率的多分类模型。
 
 ### Datasets and Inputs
+训练数据由Toxic Comment Classification Challenge比赛提供。数据为对恶性行为人工标注的Wikipedia评论数据。标注的类型为：
+* toxic
+* severe_toxic
+* obscene
+* threat
+* insult
+* indentity_hate
+比赛提供的数据由如下四个文件构成：
+* train.csv - 
 ### Solution Statement
 ### Benchmark Model
 ### Evaluation Metircs
