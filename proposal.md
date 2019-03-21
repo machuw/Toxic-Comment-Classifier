@@ -22,15 +22,64 @@ Toxic Comment Classification Challenge是kaggle上由Jigsaw提出的一个比赛
 * threat
 * insult
 * indentity_hate
+
 比赛提供的数据由如下四个文件构成：
-* train.csv - 
+* train.csv - 训练集，包括159571条已进行标注的评论数据
+* test.csv - 测试集，包括153164条待检测数据
+
+csv文件的数据格式为：
+* id
+* comment_text
+* toxic
+* severe_toxic
+* obscene
+* threat
+* insult
+* indentity_hate
+
+其中，comment_text是模型的输入，模型的输出是输入被判断为每个分类（toxic，insult等）的概率。在训练集中，评论分类的个数分布如下图[4]，可见该数据集是一个非平衡的数据集。
+![](https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png?raw=true)
+
 ### Solution Statement
+我的解决方案为：训练一个多分类的分类器，分类器的输入为评论数据c，输出为这条评论在每个分类上的概率r。c为一个文本字符串，r为取值范围(0,1)的数值。
+
+一个在文本分类里效果不错的SVMNB算法作为我的Benchmark model，长期短期记忆网络（LSTM）[5]是一种回归神经网络（RNN）算法，也是一种专为自然语言处理而设计的算法。经过实践验证可以很好地运行，并且可以作为解决方案的基础。我将使用word embedding对数据进行预处理，将文本转换为可以馈送到神经网络的数字向量表示。作为解决方案的一部分，我将评估几种单词嵌入方法，如Word2Vec，Glove，FastText。
+
 ### Benchmark Model
+SVM是最常用的文本分类算法之一，可用作基准模型。基于SVM和朴素贝叶斯算法的SVMNB[6]，它提供了比传统SVM更好的性能，是在kaggle比赛中的推荐的benchmark，我将使用SVMNB作为我的benchmark model。
+
 ### Evaluation Metircs
+我使用列平均的ROC AUC作为我的评估指标，它是单个类别预测结果ROC AUC的平均值。ROC曲线是在不同分类阈值下使用TPR和FRP绘制的图，而AUC则是ROC曲线下面积，当AUC值越大，当前的分类算法越有可能将正样本排在负样本前面，即能够更好的分类[7]。同时，偏差，方差，精度，召回和F1分数也将用作评估指标，以检查过度拟合和欠拟合。
+
 ### Project Design
+解决这个问题可拆分为如下的步骤[8]：
+1. 数据探索
+2. 数据预处理
+3. 模型设计
+4. 模型评估
+
+第一步是数据探索。我会对训练数据集中的平均分类进行分布统计，并创建可视化图形。此外，还可以创建词云图，以了解每个类别中的常用词。同时，了解数据集中的独特单词，常出现单词，填充单词等，对于数据集的理解也很重要。
+
+第二步是预处理数据，例如空值处理，异常处理处理等。在预处理期间，需要删除所有不需要的数据。这包括可能包含随机字母或单词的垃圾数据，非文本数据，用户名等。预处理措施一般包括：
+* 大写变小写
+* 去掉停顿词，标点，空白文本，英文之外的其他文本
+* 分词
+* 词性标注 - 帮助我们更好的理解单词/句子的含义
+* 词干提取 - 减少输入的语料库
+* 生成文档矩阵后计算tf-idf，去除频率较低的单词（例如去掉频率小于5的，或去掉在60%文档中出现的单词）
+
+在将数据输入神经网络模型之前，需要将整个数据解析并标记为单独的单词，并且每个单词将使用其索引进行编码。然后，每个评论文本数据将使用索引值表示，其中每个单词都用其索引替换。每个索引值都是网络的特征，这被称为词嵌入。目前有几种效果不错的词嵌入方法，如word2vec，GloVe，FastText等。
+
+我将使用循环神经网络（RNN）作为我的解决方案，它是神经网络的一种，网络会对前面的信息进行记忆并应用于当前输出的计算中，因此它可以处理顺序数据。RNN在NLP中取得了巨大的成功和广泛的应用。但是，传统的RNN使用BPTT，存在梯度消失的问题，它无法记住长期的信息。为了解决这个问题，创建了长短期记忆网络，它是一种特殊形式的RNN，具有4个神经网络层和3个门（输入，输出和遗忘）的LSTM单元。这些层和门有助于网络记住相关信息并忘记无关信息。GRU（Gated Recurrent Unit）是2014年提出来的新的RNN架构，它是简化版的LSTM，在超参数（hyper-parameters）均调优的前提下，这两种RNN架构的性能相当，但是GRU架构的参数少，所以需要的训练样本更少，易于训练。
+
+当模型训练完成后，我将使用交叉验证集对数据进行交叉验证，以调整各种参数，然后使用测试数据集进行测试，并使用所描述的评估指标（AUC）进行评估。
 
 ### Reference
 1. http://fortune.com/2018/03/22/human-moderators-facebook-youtube-twitter/
 2. https://www.theguardian.com/science/brain-flapping/2014/sep/12/comment-sections-toxic-moderation
 3. http://crowdsourcing-class.org/assignments/downloads/pak-paroubek.pdf
-4. 
+4. https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png
+5. https://www.researchgate.net/profile/Sepp_Hochreiter/publication/13853244_Long_Short-term_Memory/links/5700e75608aea6b7746a0624/Long-Short-term-Memory.pdf
+6. https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf
+7. http://alexkong.net/2013/06/introduction-to-auc-and-roc/
+8. https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf
