@@ -12,16 +12,16 @@ March 20, 2019
 我们可以看到在论文[3]中，研究人员对情感分析进行了大量研究。他们的工作重点是情绪分析，这与我们正在研究的领域非常相似。论文中定义了一种使用词袋技术预处理文本的合理方法。他们接着使用SVM和朴素贝叶斯分类器来确定推文的情绪是积极的，中性的还是负面的，并且发现朴素贝叶斯分类器更准确。此外，当他们对推文进行矢量化时，他们通过使用bigrams来提高分类器的准确性。他们的工作可以为我的benchmark model参考。
 
 ### Problem Statement
-Toxic Comment Classification Challenge是kaggle上由Jigsaw提出的一个比赛，旨在找到更好的对恶毒评论的多分类模型。我通过参加这个比赛，使用比赛提供的人工标注的Wikipedia评论数据，训练一个能够在任意文本数据上判断多种恶意（威胁，色情，侮辱和种族歧视言论等）分类概率的多分类模型。
+Toxic Comment Classification Challenge是kaggle上由Jigsaw提出的一个比赛，比赛中提供了带有多标签分类的Wikipedia评论数据，我们通过使用这份数据训练一个**文本多类型分类器**，对任意未知文本进行多标签类型（威胁，色情，侮辱和种族歧视言论等）的分类，并给出文本分别属于每个分类的概率。**这是一个文本多分类问题，并属于有监督学习**。
 
 ### Datasets and Inputs
-训练数据由Toxic Comment Classification Challenge比赛提供。数据为对恶性行为人工标注的Wikipedia评论数据。标注的类型为：
+训练数据由Toxic Comment Classification Challenge比赛提供。数据为对恶性行为人工标注的Wikipedia评论数据，每个样本有可能被同时标注为多个类型，当所有类型的标注都为0时，表示该文本不是恶毒评论。标注的类型包括：
 * toxic
 * severe_toxic
 * obscene
 * threat
 * insult
-* indentity_hate
+* identity_hate
 
 比赛提供的数据由如下四个文件构成：
 * train.csv - 训练集，包括159571条已进行标注的评论数据
@@ -35,13 +35,15 @@ csv文件的数据格式为：
 * obscene
 * threat
 * insult
-* indentity_hate
+* identity_hate
 
-其中，comment_text是模型的输入，模型的输出是输入被判断为每个分类（toxic，insult等）的概率。在训练集中，评论分类的个数分布如下图[4]，可见该数据集是一个非平衡的数据集。
+其中，comment_text是模型的输入。toxic，severe_toxic，obscene，threat，insult，identity_hate，如之前所诉为样本的分类标签，样本有可能同时属于多个分类。模型的输出是输入文本被**分别**判断为每个分类（toxic，insult等）的概率。
+
+同时，在训练集中，评论人工标注类型标签的个数分布如下图[4]，由图可见该数据集是一个非平衡的数据集。
 ![](https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png?raw=true)
 
 ### Solution Statement
-我的解决方案为：训练一个多分类的分类器，分类器的输入为评论数据c，输出为这条评论在每个分类上的概率r。c为一个文本字符串，r为取值范围(0,1)的数值。
+我的解决方案为：训练一个**文本多分类的分类器**，分类器的输入为任意文本数据c，输出为该文本在多分类的每个类型上的概率r。c为一个文本字符串，r为取值范围(0,1)的数值。
 
 一个在文本分类里效果不错的SVMNB算法作为我的Benchmark model，长期短期记忆网络（LSTM）[5]是一种回归神经网络（RNN）算法，也是一种专为自然语言处理而设计的算法。经过实践验证可以很好地运行，并且可以作为解决方案的基础。我将使用word embedding对数据进行预处理，将文本转换为可以馈送到神经网络的数字向量表示。作为解决方案的一部分，我将评估几种单词嵌入方法，如Word2Vec，Glove，FastText。
 
@@ -49,10 +51,27 @@ csv文件的数据格式为：
 SVM是最常用的文本分类算法之一，可用作基准模型。基于SVM和朴素贝叶斯算法的SVMNB[6]，它提供了比传统SVM更好的性能，是在kaggle比赛中的推荐的benchmark，我将使用SVMNB作为我的benchmark model。
 
 ### Evaluation Metircs
-我使用列平均的ROC AUC作为我的评估指标，它是单个类别预测结果ROC AUC的平均值。ROC曲线是在不同分类阈值下使用TPR和FRP绘制的图，而AUC则是ROC曲线下面积，当AUC值越大，当前的分类算法越有可能将正样本排在负样本前面，即能够更好的分类[7]。同时，偏差，方差，精度，召回和F1分数也将用作评估指标，以检查过度拟合和欠拟合。
+我使用列平均的ROC AUC作为我的评估指标，它是单个类别预测结果ROC AUC的平均值。ROC曲线是在不同分类阈值下使用TPR和FRP绘制的图，而AUC则是ROC曲线下面积，当AUC值越大，当前的分类算法越有可能将正样本排在负样本前面，即能够更好的分类[7]。
+
+ROC空间将假阳性率（FPR）定义为X轴，真阳性率（TPR）定义为Y轴[8]。
+* TPR：真阳性率，在所有实际为阳性的样本中，被正确地判断为阳性之比率。
+$$TPR=TP/(TP+FN)$$
+* FPR：假阳性率在所有实际为阴性的样本中，被错误地判断为阳性之比率。
+$$FPR=FP/(FP+TN)$$
+将同一模型每个阈值的(FPR, TPR)座标都画在ROC空间里，就成为特定模型的ROC曲线。
+
+AUC为ROC曲线下方的面积（Area under the Curve of ROC），它表示当随机抽取一个阳性样本和一个阴性样本，分类器正确判断阳性样本的值高于阴性样本的概率（假设阈值以上是阳性，以下是阴性）。简单说来说AUC值越大的分类器，正确率越高。
+
+从AUC判断分类器（预测模型）优劣的标准：
+* AUC = 1，是完美分类器，采用这个预测模型时，存在至少一个阈值能得出完美预测。绝大多数预测的场合，不存在完美分类器。
+* 0.5 < AUC < 1，优于随机猜测。这个分类器（模型）妥善设定阈值的话，能有预测价值。
+* AUC = 0.5，跟随机猜测一样（例：丢铜板），模型没有预测价值。
+* AUC < 0.5，比随机猜测还差；但只要总是反预测而行，就优于随机猜测。
+
+同时，偏差，方差，精度，召回和F1分数也将用作评估指标，以检查过度拟合和欠拟合。
 
 ### Project Design
-解决这个问题可拆分为如下的步骤[8]：
+解决这个问题可拆分为如下的步骤[9]：
 1. 数据探索
 2. 数据预处理
 3. 模型设计
@@ -82,4 +101,5 @@ SVM是最常用的文本分类算法之一，可用作基准模型。基于SVM�
 5. https://www.researchgate.net/profile/Sepp_Hochreiter/publication/13853244_Long_Short-term_Memory/links/5700e75608aea6b7746a0624/Long-Short-term-Memory.pdf
 6. https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf
 7. http://alexkong.net/2013/06/introduction-to-auc-and-roc/
-8. https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf
+8. https://zh.wikipedia.org/wiki/ROC%E6%9B%B2%E7%BA%BF
+9. https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf

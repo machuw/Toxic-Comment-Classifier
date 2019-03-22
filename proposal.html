@@ -1,0 +1,107 @@
+<!doctype html><html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/2.10.0/github-markdown.min.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js">
+<link  rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.10.0/dist/katex.min.css" integrity="sha384-9eLZqc9ds8eNjO3TmqPeYcDj8n+Qfa4nuSiGYa6DjLNcv9BtN69ZIulL9+8CqC9Y" crossorigin="anonymous">
+<link rel="stylesheet" href="https://gitcdn.xyz/repo/goessner/mdmath/master/css/texmath.css">
+<link rel="stylesheet" href="https://gitcdn.xyz/repo/goessner/mdmath/master/css/vscode-texmath.css">
+
+</head><body class="markdown-body">
+<h1 id="machine-learning-engineer-nanodegree-2" data-line="0" class="code-line">Machine Learning Engineer Nanodegree</h1>
+<h2 id="capstone-proposal-2" data-line="1" class="code-line">Capstone Proposal</h2>
+<p data-line="2" class="code-line">Yuanchao Ma</p>
+<p data-line="4" class="code-line">March 20, 2019</p>
+<h2 id="proposal-2" data-line="5" class="code-line">Proposal</h2>
+<h3 id="domain-background-2" data-line="6" class="code-line">Domain Background</h3>
+<p data-line="7" class="code-line">互联网的本质是为了降低人们获取信息的成本，更便捷的进行沟通和分享。因此，从互联网创建时，就允许世界各地的人们通过互联网进行自由的交流、讨论以及合作。而像国内的贴吧，微博，微信，国外的Twitter，Facebook，Wikipedia等社区平台的建立，形成了这些互动可以发生的基础。为了人们在社区中可以更有序的交流以及促进对话，许多的社区都制定了自己的标准和规则，并防止这些社区被有毒行为劫持或摧毁。然而，随着有毒评论的黑色产业化，利益驱使人们通过各种手段来规避规范和标准，使得通过人为来执行这些规范和标准变得越来越困难。事实上Facebook正在招聘越来越多的版主来筛选可疑的内容[1]。同时，许多新闻网站现在也已经开始禁用评论功能[2]。而这些人工的审核监控机制，是非常低效的做法。</p>
+<p data-line="9" class="code-line">综上，我们需要一种工具来自动化地对用户评论进行监视，分类和标记。此外，不同的网站可能需要监控不同类型的内容。因此需要建立一个能够区分不同类型的言语攻击行为的模型。</p>
+<p data-line="11" class="code-line">我们可以看到在论文[3]中，研究人员对情感分析进行了大量研究。他们的工作重点是情绪分析，这与我们正在研究的领域非常相似。论文中定义了一种使用词袋技术预处理文本的合理方法。他们接着使用SVM和朴素贝叶斯分类器来确定推文的情绪是积极的，中性的还是负面的，并且发现朴素贝叶斯分类器更准确。此外，当他们对推文进行矢量化时，他们通过使用bigrams来提高分类器的准确性。他们的工作可以为我的benchmark model参考。</p>
+<h3 id="problem-statement-2" data-line="13" class="code-line">Problem Statement</h3>
+<p data-line="14" class="code-line">Toxic Comment Classification Challenge是kaggle上由Jigsaw提出的一个比赛，比赛中提供了带有多标签分类的Wikipedia评论数据，我们通过使用这份数据训练一个<strong>文本多类型分类器</strong>，对任意未知文本进行多标签类型（威胁，色情，侮辱和种族歧视言论等）的分类，并给出文本分别属于每个分类的概率。<strong>这是一个文本多分类问题，并属于有监督学习</strong>。</p>
+<h3 id="datasets-and-inputs-2" data-line="16" class="code-line">Datasets and Inputs</h3>
+<p data-line="17" class="code-line">训练数据由Toxic Comment Classification Challenge比赛提供。数据为对恶性行为人工标注的Wikipedia评论数据，每个样本有可能被同时标注为多个类型，当所有类型的标注都为0时，表示该文本不是恶毒评论。标注的类型包括：</p>
+<ul>
+<li data-line="18" class="code-line">toxic</li>
+<li data-line="19" class="code-line">severe_toxic</li>
+<li data-line="20" class="code-line">obscene</li>
+<li data-line="21" class="code-line">threat</li>
+<li data-line="22" class="code-line">insult</li>
+<li data-line="23" class="code-line">identity_hate</li>
+</ul>
+<p data-line="25" class="code-line">比赛提供的数据由如下四个文件构成：</p>
+<ul>
+<li data-line="26" class="code-line">train.csv - 训练集，包括159571条已进行标注的评论数据</li>
+<li data-line="27" class="code-line">test.csv - 测试集，包括153164条待检测数据</li>
+</ul>
+<p data-line="29" class="code-line">csv文件的数据格式为：</p>
+<ul>
+<li data-line="30" class="code-line">id</li>
+<li data-line="31" class="code-line">comment_text</li>
+<li data-line="32" class="code-line">toxic</li>
+<li data-line="33" class="code-line">severe_toxic</li>
+<li data-line="34" class="code-line">obscene</li>
+<li data-line="35" class="code-line">threat</li>
+<li data-line="36" class="code-line">insult</li>
+<li data-line="37" class="code-line">identity_hate</li>
+</ul>
+<p data-line="39" class="code-line">其中，comment_text是模型的输入。toxic，severe_toxic，obscene，threat，insult，identity_hate，如之前所诉为样本的分类标签，样本有可能同时属于多个分类。模型的输出是输入文本被<strong>分别</strong>判断为每个分类（toxic，insult等）的概率。</p>
+<p data-line="41" class="code-line">同时，在训练集中，评论人工标注类型标签的个数分布如下图[4]，由图可见该数据集是一个非平衡的数据集。
+<img src="https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png?raw=true" alt="" class="loading" id="image-hash-a0a3765f64afa4eec9da3769821fc1652a0b615a9c87e71dbd463eaf4d634860"></p>
+<h3 id="solution-statement-2" data-line="44" class="code-line">Solution Statement</h3>
+<p data-line="45" class="code-line">我的解决方案为：训练一个<strong>文本多分类的分类器</strong>，分类器的输入为任意文本数据c，输出为该文本在多分类的每个类型上的概率r。c为一个文本字符串，r为取值范围(0,1)的数值。</p>
+<p data-line="47" class="code-line">一个在文本分类里效果不错的SVMNB算法作为我的Benchmark model，长期短期记忆网络（LSTM）[5]是一种回归神经网络（RNN）算法，也是一种专为自然语言处理而设计的算法。经过实践验证可以很好地运行，并且可以作为解决方案的基础。我将使用word embedding对数据进行预处理，将文本转换为可以馈送到神经网络的数字向量表示。作为解决方案的一部分，我将评估几种单词嵌入方法，如Word2Vec，Glove，FastText。</p>
+<h3 id="benchmark-model-2" data-line="49" class="code-line">Benchmark Model</h3>
+<p data-line="50" class="code-line">SVM是最常用的文本分类算法之一，可用作基准模型。基于SVM和朴素贝叶斯算法的SVMNB[6]，它提供了比传统SVM更好的性能，是在kaggle比赛中的推荐的benchmark，我将使用SVMNB作为我的benchmark model。</p>
+<h3 id="evaluation-metircs-2" data-line="52" class="code-line">Evaluation Metircs</h3>
+<p data-line="53" class="code-line">我使用列平均的ROC AUC作为我的评估指标，它是单个类别预测结果ROC AUC的平均值。ROC曲线是在不同分类阈值下使用TPR和FRP绘制的图，而AUC则是ROC曲线下面积，当AUC值越大，当前的分类算法越有可能将正样本排在负样本前面，即能够更好的分类[7]。</p>
+<p data-line="55" class="code-line">ROC空间将假阳性率（FPR）定义为X轴，真阳性率（TPR）定义为Y轴[8]。</p>
+<ul>
+<li data-line="56" class="code-line">TPR：真阳性率，在所有实际为阳性的样本中，被正确地判断为阳性之比率。</li>
+</ul>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>T</mi><mi>P</mi><mi>R</mi><mo>=</mo><mi>T</mi><mi>P</mi><mi mathvariant="normal">/</mi><mo>(</mo><mi>T</mi><mi>P</mi><mo>+</mo><mi>F</mi><mi>N</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">TPR=TP/(TP+FN)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord">/</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span></eqn></section><ul>
+<li data-line="58" class="code-line">FPR：假阳性率在所有实际为阴性的样本中，被错误地判断为阳性之比率。</li>
+</ul>
+<section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>F</mi><mi>P</mi><mi>R</mi><mo>=</mo><mi>F</mi><mi>P</mi><mi mathvariant="normal">/</mi><mo>(</mo><mi>F</mi><mi>P</mi><mo>+</mo><mi>T</mi><mi>N</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">FPR=FP/(FP+TN)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mord">/</span><span class="mopen">(</span><span class="mord mathdefault" style="margin-right:0.13889em;">F</span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">T</span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mclose">)</span></span></span></span></span></eqn></section><p data-line="60" class="code-line">将同一模型每个阈值的(FPR, TPR)座标都画在ROC空间里，就成为特定模型的ROC曲线。</p>
+<p data-line="62" class="code-line">AUC为ROC曲线下方的面积（Area under the Curve of ROC），它表示当随机抽取一个阳性样本和一个阴性样本，分类器正确判断阳性样本的值高于阴性样本的概率（假设阈值以上是阳性，以下是阴性）。简单说来说AUC值越大的分类器，正确率越高。</p>
+<p data-line="64" class="code-line">从AUC判断分类器（预测模型）优劣的标准：</p>
+<ul>
+<li data-line="65" class="code-line">AUC = 1，是完美分类器，采用这个预测模型时，存在至少一个阈值能得出完美预测。绝大多数预测的场合，不存在完美分类器。</li>
+<li data-line="66" class="code-line">0.5 &lt; AUC &lt; 1，优于随机猜测。这个分类器（模型）妥善设定阈值的话，能有预测价值。</li>
+<li data-line="67" class="code-line">AUC = 0.5，跟随机猜测一样（例：丢铜板），模型没有预测价值。</li>
+<li data-line="68" class="code-line">AUC &lt; 0.5，比随机猜测还差；但只要总是反预测而行，就优于随机猜测。</li>
+</ul>
+<p data-line="70" class="code-line">同时，偏差，方差，精度，召回和F1分数也将用作评估指标，以检查过度拟合和欠拟合。</p>
+<h3 id="project-design-2" data-line="72" class="code-line">Project Design</h3>
+<p data-line="73" class="code-line">解决这个问题可拆分为如下的步骤[9]：</p>
+<ol>
+<li data-line="74" class="code-line">数据探索</li>
+<li data-line="75" class="code-line">数据预处理</li>
+<li data-line="76" class="code-line">模型设计</li>
+<li data-line="77" class="code-line">模型评估</li>
+</ol>
+<p data-line="79" class="code-line">第一步是数据探索。我会对训练数据集中的平均分类进行分布统计，并创建可视化图形。此外，还可以创建词云图，以了解每个类别中的常用词。同时，了解数据集中的独特单词，常出现单词，填充单词等，对于数据集的理解也很重要。</p>
+<p data-line="81" class="code-line">第二步是预处理数据，例如空值处理，异常处理处理等。在预处理期间，需要删除所有不需要的数据。这包括可能包含随机字母或单词的垃圾数据，非文本数据，用户名等。预处理措施一般包括：</p>
+<ul>
+<li data-line="82" class="code-line">大写变小写</li>
+<li data-line="83" class="code-line">去掉停顿词，标点，空白文本，英文之外的其他文本</li>
+<li data-line="84" class="code-line">分词</li>
+<li data-line="85" class="code-line">词性标注 - 帮助我们更好的理解单词/句子的含义</li>
+<li data-line="86" class="code-line">词干提取 - 减少输入的语料库</li>
+<li data-line="87" class="code-line">生成文档矩阵后计算tf-idf，去除频率较低的单词（例如去掉频率小于5的，或去掉在60%文档中出现的单词）</li>
+</ul>
+<p data-line="89" class="code-line">在将数据输入神经网络模型之前，需要将整个数据解析并标记为单独的单词，并且每个单词将使用其索引进行编码。然后，每个评论文本数据将使用索引值表示，其中每个单词都用其索引替换。每个索引值都是网络的特征，这被称为词嵌入。目前有几种效果不错的词嵌入方法，如word2vec，GloVe，FastText等。</p>
+<p data-line="91" class="code-line">我将使用循环神经网络（RNN）作为我的解决方案，它是神经网络的一种，网络会对前面的信息进行记忆并应用于当前输出的计算中，因此它可以处理顺序数据。RNN在NLP中取得了巨大的成功和广泛的应用。但是，传统的RNN使用BPTT，存在梯度消失的问题，它无法记住长期的信息。为了解决这个问题，创建了长短期记忆网络，它是一种特殊形式的RNN，具有4个神经网络层和3个门（输入，输出和遗忘）的LSTM单元。这些层和门有助于网络记住相关信息并忘记无关信息。GRU（Gated Recurrent Unit）是2014年提出来的新的RNN架构，它是简化版的LSTM，在超参数（hyper-parameters）均调优的前提下，这两种RNN架构的性能相当，但是GRU架构的参数少，所以需要的训练样本更少，易于训练。</p>
+<p data-line="93" class="code-line">当模型训练完成后，我将使用交叉验证集对数据进行交叉验证，以调整各种参数，然后使用测试数据集进行测试，并使用所描述的评估指标（AUC）进行评估。</p>
+<h3 id="reference-2" data-line="95" class="code-line">Reference</h3>
+<ol>
+<li data-line="96" class="code-line"><a href="http://fortune.com/2018/03/22/human-moderators-facebook-youtube-twitter/">http://fortune.com/2018/03/22/human-moderators-facebook-youtube-twitter/</a></li>
+<li data-line="97" class="code-line"><a href="https://www.theguardian.com/science/brain-flapping/2014/sep/12/comment-sections-toxic-moderation">https://www.theguardian.com/science/brain-flapping/2014/sep/12/comment-sections-toxic-moderation</a></li>
+<li data-line="98" class="code-line"><a href="http://crowdsourcing-class.org/assignments/downloads/pak-paroubek.pdf">http://crowdsourcing-class.org/assignments/downloads/pak-paroubek.pdf</a></li>
+<li data-line="99" class="code-line"><a href="https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png">https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png</a></li>
+<li data-line="100" class="code-line"><a href="https://www.researchgate.net/profile/Sepp_Hochreiter/publication/13853244_Long_Short-term_Memory/links/5700e75608aea6b7746a0624/Long-Short-term-Memory.pdf">https://www.researchgate.net/profile/Sepp_Hochreiter/publication/13853244_Long_Short-term_Memory/links/5700e75608aea6b7746a0624/Long-Short-term-Memory.pdf</a></li>
+<li data-line="101" class="code-line"><a href="https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf">https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf</a></li>
+<li data-line="102" class="code-line"><a href="http://alexkong.net/2013/06/introduction-to-auc-and-roc/">http://alexkong.net/2013/06/introduction-to-auc-and-roc/</a></li>
+<li data-line="103" class="code-line"><a href="https://zh.wikipedia.org/wiki/ROC%E6%9B%B2%E7%BA%BF">https://zh.wikipedia.org/wiki/ROC曲线</a></li>
+<li data-line="104" class="code-line"><a href="https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf">https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf</a></li>
+</ol>
+
+</body></html>
