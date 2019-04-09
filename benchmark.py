@@ -15,7 +15,7 @@ test_labels = pd.read_csv('data/test_labels.csv')
 subm_sample = pd.read_csv('data/sample_submission.csv')
 
 test = pd.concat([test_comments, test_labels], axis=1)
-test = test[test.toxic != -1]
+#test = test[test.toxic != -1]
  
 # split data 
 class_names = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
@@ -62,23 +62,25 @@ for i, j in enumerate(class_names):
     m = svm.fit(x_nb, y)
     preds[:,i] = m.predict(test_x.multiply(r))
 
-test_y = test.iloc[:, 2:]
+test_y = test.iloc[:, 3:]
+
+def score_f(y, p_y):
+    print("roc auc score ", metrics.roc_auc_score(y, p_y))
+    print("accuracy ", metrics.accuracy_score(y, p_y))
+    print("precision score ", metrics.precision_score(y, p_y, average='weighted'))
+    print("recall score ", metrics.recall_score(y, p_y, average='weighted'))
+    print("f1 score ", metrics.f1_score(y, p_y, average='weighted'))
 
 for i, j in enumerate(class_names):
     print("\n", j)
-    print("roc auc score ", metrics.roc_auc_score(test_y.iloc[:,i], preds[:,i]))
-    print("accuracy ", metrics.accuracy_score(test_y.iloc[:,i], preds[:,i]))
-    print("precision score ", metrics.precision_score(test_y.iloc[:,i], preds[:,i], average='weighted'))
-    print("recall score ", metrics.recall_score(test_y.iloc[:,i], preds[:,i], average='weighted'))
-    print("f1 score ", metrics.f1_score(test_y.iloc[:,i], preds[:,i], average='weighted'))
+    #score_f(test_y.iloc[:,i], preds[:,i])    
+    #print(metrics.classification_report(test_y.iloc[:,i], preds[:,i]))
 
-print("\nOverall")
-print("roc auc score ", metrics.roc_auc_score(test_y, preds))
-print("accuracy ", metrics.accuracy_score(test_y, preds))
-print("precision score ", metrics.precision_score(test_y, preds, average='weighted'))
-print("recall score ", metrics.recall_score(test_y, preds, average='weighted'))
-print("f1 score ", metrics.f1_score(test_y, preds, average='weighted'))
+#print("\nOverall")
+#score_f(test_y, preds)
+#print(metrics.classification_report(test_y, preds))
 
 submid = pd.DataFrame({'id': subm_sample["id"]})
 submission = pd.concat([submid, pd.DataFrame(preds, columns=class_names)], axis=1)
+print(submission)
 submission.to_csv('submission.csv', index=False)
