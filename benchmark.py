@@ -5,6 +5,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 
 from sklearn.svm import LinearSVC
+from sklearn.linear_model import LogisticRegression
 from sklearn.feature_extraction.text import CountVectorizer, TfidfVectorizer
 from sklearn import metrics
 
@@ -14,8 +15,9 @@ test_comments = pd.read_csv('data/test.csv')
 test_labels = pd.read_csv('data/test_labels.csv')
 subm_sample = pd.read_csv('data/sample_submission.csv')
 
-test = pd.concat([test_comments, test_labels], axis=1)
+#test = pd.concat([test_comments, test_labels], axis=1)
 #test = test[test.toxic != -1]
+test = test_comments 
  
 # split data 
 class_names = ['toxic', 'severe_toxic', 'obscene', 'threat', 'insult', 'identity_hate']
@@ -38,10 +40,10 @@ word_vec = TfidfVectorizer(
     use_idf=True,
     smooth_idf=True
 )
-all_comments = pd.concat([train['comment_text'], test['comment_text']])
-word_vec.fit(all_comments)
+#all_comments = pd.concat([train['comment_text'], test['comment_text']])
+#word_vec.fit(all_comments)
 
-train_word_features = word_vec.transform(train['comment_text'])
+train_word_features = word_vec.fit_transform(train['comment_text'])
 test_word_features = word_vec.transform(test['comment_text'])
 
 def pr(y_i, y):
@@ -51,16 +53,24 @@ def pr(y_i, y):
 x = train_word_features
 test_x = test_word_features
 
+def get_mdl(y):
+    y = y.values
+    r = np.log(pr(1,y) / pr(0,y))
+    m = LogisticRegression(C=4, dual=True)
+    x_nb = x.multiply(r)
+    return m.fit(x_nb, y), r
+
 preds = np.zeros((len(test), len(class_names)))
 
 for i, j in enumerate(class_names):
     print('fit ', j)
     y = train[j].values
     r = np.log(pr(1, y) / pr(0, y))
-    svm = LinearSVC(C=4, dual=False)
+    #svm = LinearSVC(C=4, dual=False)
+    svm = LogisticRegression(C=4, dual=False)
     x_nb = x.multiply(r)
     m = svm.fit(x_nb, y)
-    preds[:,i] = m.predict(test_x.multiply(r))
+    preds[:,i] = m.predict_proba(test_x.multiply(r))[:,1]
 
 test_y = test.iloc[:, 3:]
 
