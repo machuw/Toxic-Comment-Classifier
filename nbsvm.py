@@ -50,7 +50,6 @@ preds = np.zeros((len(test), len(label_cols)))
 for i, j in enumerate(label_cols):
     print('fit', j)
     m,r = get_mdl(train[j])
-    print(type(r))
     preds[:,i] = m.predict_proba(test_x.multiply(r))[:,1]
 
 submid = pd.DataFrame({'id': subm["id"]})
