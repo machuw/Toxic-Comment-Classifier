@@ -33,6 +33,7 @@ test_term_doc = vec.transform(test[COMMENT])
 
 def pr(y_i, y):
     p = x[y==y_i].sum(0)
+    print((y==y_i))
     return (p+1) / ((y==y_i).sum()+1)
 
 x = trn_term_doc
@@ -40,6 +41,7 @@ test_x = test_term_doc
 
 def get_mdl(y):
     y = y.values
+    print(y.shape)
     r = np.log(pr(1,y) / pr(0,y))
     m = LogisticRegression(C=4, dual=True)
     x_nb = x.multiply(r)

@@ -64,15 +64,10 @@ preds = np.zeros((len(test), len(class_names)))
 
 for i, j in enumerate(class_names):
     print('fit ', j)
-    y = train[j].values
-    r = np.log(pr(1, y) / pr(0, y))
-    #svm = LinearSVC(C=4, dual=False)
-    svm = LogisticRegression(C=4, dual=False)
-    x_nb = x.multiply(r)
-    m = svm.fit(x_nb, y)
+    m,r = get_mdl(train[j])
     preds[:,i] = m.predict_proba(test_x.multiply(r))[:,1]
 
-test_y = test.iloc[:, 3:]
+test_y = test_labels.iloc[:, 1:]
 
 def score_f(y, p_y):
     print("roc auc score ", metrics.roc_auc_score(y, p_y))
@@ -92,5 +87,4 @@ for i, j in enumerate(class_names):
 
 submid = pd.DataFrame({'id': subm_sample["id"]})
 submission = pd.concat([submid, pd.DataFrame(preds, columns=class_names)], axis=1)
-print(submission)
 submission.to_csv('submission.csv', index=False)
