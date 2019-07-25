@@ -6,18 +6,18 @@
 <link rel="stylesheet" href="https://gitcdn.xyz/repo/goessner/mdmath/master/css/vscode-texmath.css">
 
 </head><body class="markdown-body">
-<h1 id="e69cbae599a8e5ada6e4b9a0e7bab3e7b1b3e5ada6e4bd8d-4" data-line="0" class="code-line">机器学习纳米学位</h1>
-<h2 id="e6af95e4b89ae9a1b9e79bae-4" data-line="1" class="code-line">毕业项目</h2>
+<h1 id="e69cbae599a8e5ada6e4b9a0e7bab3e7b1b3e5ada6e4bd8d-2" data-line="0" class="code-line">机器学习纳米学位</h1>
+<h2 id="e6af95e4b89ae9a1b9e79bae-2" data-line="1" class="code-line">毕业项目</h2>
 <p data-line="2" class="code-line">马远超
 2019-07-01</p>
-<h2 id="i-e997aee9a298e5ae9ae4b989-4" data-line="5" class="code-line">I. 问题定义</h2>
-<h3 id="e9a1b9e79baee6a682e8bfb0-4" data-line="6" class="code-line">项目概述</h3>
+<h2 id="i-e997aee9a298e5ae9ae4b989-2" data-line="5" class="code-line">I. 问题定义</h2>
+<h3 id="e9a1b9e79baee6a682e8bfb0-2" data-line="6" class="code-line">项目概述</h3>
 <p data-line="7" class="code-line">互联网的本质是为了降低人们获取信息的成本，更便捷的进行沟通和分享。因此，从互联网创建时，就允许世界各地的人们通过互联网进行自由的交流、讨论以及合作。而像国内的贴吧，微博，微信，国外的Twitter，Facebook，Wikipedia等社区平台的建立，形成了这些互动可以发生的基础。为了人们在社区中可以更有序的交流以及促进对话，许多的社区都制定了自己的标准和规则，并防止这些社区被有毒行为劫持或摧毁。然而，随着有毒评论的黑色产业化，利益驱使人们通过各种手段来规避规范和标准，使得通过人为来执行这些规范和标准变得越来越困难。事实上Facebook正在招聘越来越多的版主来筛选可疑的内容[1]。同时，许多新闻网站现在也已经开始禁用评论功能[2]。而这些人工的审核监控机制，是非常低效的做法。</p>
 <p data-line="9" class="code-line">综上，我们需要一种工具来自动化地对用户评论进行监视，分类和标记。此外，不同的网站可能需要监控不同类型的内容。因此需要建立一个能够区分不同类型的言语攻击行为的模型。</p>
 <p data-line="11" class="code-line">我们可以看到在论文[3]中，研究人员对情感分析进行了大量研究。他们的工作重点是情绪分析，这与我们正在研究的领域非常相似。论文中定义了一种使用词袋技术预处理文本的合理方法。他们接着使用SVM和朴素贝叶斯分类器来确定推文的情绪是积极的，中性的还是负面的，并且发现朴素贝叶斯分类器更准确。此外，当他们对推文进行矢量化时，他们通过使用bigrams来提高分类器的准确性。他们的工作可以为我的benchmark model参考。</p>
-<h3 id="e997aee9a298e99988e8bfb0-4" data-line="13" class="code-line">问题陈述</h3>
+<h3 id="e997aee9a298e99988e8bfb0-2" data-line="13" class="code-line">问题陈述</h3>
 <p data-line="14" class="code-line">Toxic Comment Classification Challenge是kaggle上由Jigsaw提出的一个比赛，比赛中提供了带有多标签分类的Wikipedia评论数据，我们通过使用这份数据训练一个<strong>文本多类型分类器</strong>，对任意未知文本进行多标签类型（威胁，色情，侮辱和种族歧视言论等）的分类，并给出文本分别属于每个分类的概率。<strong>这是一个文本多分类问题，并属于有监督学习</strong>。</p>
-<h3 id="e8af84e4bbb7e68c87e6a087-4" data-line="16" class="code-line">评价指标</h3>
+<h3 id="e8af84e4bbb7e68c87e6a087-2" data-line="16" class="code-line">评价指标</h3>
 <p data-line="17" class="code-line">我使用列平均的ROC AUC作为我的评估指标，它是单个类别预测结果ROC AUC的平均值。ROC曲线是在不同分类阈值下使用TPR和FRP绘制的图，而AUC则是ROC曲线下面积，当AUC值越大，当前的分类算法越有可能将正样本排在负样本前面，即能够更好的分类[7]。</p>
 <p data-line="19" class="code-line">ROC空间将假阳性率（FPR）定义为X轴，真阳性率（TPR）定义为Y轴[8]。</p>
 <ul>
@@ -36,8 +36,8 @@
 <li data-line="32" class="code-line">AUC &lt; 0.5，比随机猜测还差；但只要总是反预测而行，就优于随机猜测。</li>
 </ul>
 <p data-line="34" class="code-line">同时，偏差，方差，精度，召回和F1分数也将用作评估指标，以检查过度拟合和欠拟合。</p>
-<h2 id="ii-e58886e69e90-4" data-line="36" class="code-line">II. 分析</h2>
-<h3 id="e695b0e68daee68ea2e7b4a2-4" data-line="37" class="code-line">数据探索</h3>
+<h2 id="ii-e58886e69e90-2" data-line="36" class="code-line">II. 分析</h2>
+<h3 id="e695b0e68daee68ea2e7b4a2-2" data-line="37" class="code-line">数据探索</h3>
 <p data-line="38" class="code-line">训练数据由Toxic Comment Classification Challenge比赛提供。数据为对恶性行为人工标注的Wikipedia评论数据，每个样本有可能被同时标注为多个类型，当所有类型的标注都为0时，表示该文本不是恶毒评论。标注的类型包括：</p>
 <ul>
 <li data-line="39" class="code-line">toxic</li>
@@ -67,25 +67,25 @@
 <p data-line="62" class="code-line">同时，在训练集中，评论人工标注类型标签的个数分布如下图[4]，由图可见该数据集是一个非平衡的数据集。
 <img src="/Users/mayuanchao/workspace/MLND/Toxic-Comment-Classifier/pics/Exploration-1.png" alt="" class="loading" id="image-hash-f56c077890c728220edd1f1b5b43f82f3ae34710b774ea05540e99f898e913ef"></p>
 <p data-line="65" class="code-line">下图显示了训练集中每条评论的单词数。正如我们所看到的，大多数评论都有0到100个单词。去重后单词数小于或等于100的评论占比为97%。
-<img src="vscode-resource:/Users/mayuanchao/workspace/MLND/Toxic-Comment-Classifier/pics/Exploration-2.png" alt="" class="loading" id="image-hash-d4b23afde6f287697ef6d31f5482cfe4d606e4b23fe8adf17548d65e33a265cf"></p>
-<h3 id="e68ea2e7b4a2e680a7e58fafe8a786e58c96-4" data-line="68" class="code-line">探索性可视化</h3>
-<h3 id="e7ae97e6b395e5928ce68a80e69caf-4" data-line="70" class="code-line">算法和技术</h3>
+<img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/Exploration-2.png?raw=true" alt="" class="loading" id="image-hash-d4f5fa86eef87dc190e6561b15babeb51747a897f32f745fb861fb3ff3909a10"></p>
+<h3 id="e68ea2e7b4a2e680a7e58fafe8a786e58c96-2" data-line="68" class="code-line">探索性可视化</h3>
+<h3 id="e7ae97e6b395e5928ce68a80e69caf-2" data-line="70" class="code-line">算法和技术</h3>
 <p data-line="71" class="code-line">这个问题可以通过使用一种算法来解决，该算法将评论作为输入并输出一个概率列表，无论它是否有毒和毒性类型。文本分类最常用和简单的基线模型是朴素贝叶斯分类器和支持向量机。</p>
 <p data-line="73" class="code-line"><strong>朴素贝叶斯分类器</strong>是一个基于贝叶斯规则的线性分类器：</p>
 <section><eqn><span class="katex-display"><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><msub><mi>w</mi><mi>j</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>X</mi><mi>i</mi></msub><mo>)</mo><mo>=</mo><mfrac><mrow><mi>P</mi><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mi>j</mi></msub><mo>)</mo><mo>⋅</mo><mi>P</mi><mo>(</mo><msub><mi>w</mi><mi>j</mi></msub><mo>)</mo></mrow><mrow><mi>P</mi><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mo>)</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">P(w_j|X_i) = \frac{P(X_i|w_j) \cdot P(w_j)}{P(X_i)}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:2.363em;vertical-align:-0.936em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.427em;"><span style="top:-2.314em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.677em;"><span class="pstrut" style="height:3em;"></span><span class="mord"><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">⋅</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.936em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></span></eqn></section><p data-line="77" class="code-line">后验概率<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><msub><mi>w</mi><mi>j</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>X</mi><mi>i</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">P(w_j|X_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>可以被描述为输入属于类的概率，给定输入的特征和特征的条件概率（如果它们属于特定类）。朴素贝叶斯分类器还假设每个特征独立于其他特征。</p>
 <p data-line="79" class="code-line">它们通过找出单词<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span></eq>属于某个类的概率来识别给定一组单词<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><msub><mi>w</mi><mn>1</mn></msub><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><msub><mi>w</mi><mi>n</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">(w_1..w_n)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.30110799999999993em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">.</span><span class="mord">.</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.151392em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>的类<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><msub><mi>w</mi><mi>j</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>X</mi><mi>i</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">P(w_j|X_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>的概率<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>w</mi></mrow><annotation encoding="application/x-tex">w</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span></span></span></span></eq>对于数据集<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mi mathvariant="normal">∣</mi><msub><mi>w</mi><mi>j</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">P(X_i|w_j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mord">∣</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>中的每个单词，并将其乘以类的概率<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><msub><mi>w</mi><mi>j</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">P(w_j)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.036108em;vertical-align:-0.286108em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.311664em;"><span style="top:-2.5500000000000003em;margin-left:-0.02691em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight" style="margin-right:0.05724em;">j</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.286108em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>并将其除以单词出现的概率<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>P</mi><mo>(</mo><msub><mi>X</mi><mi>i</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">P(X_i)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.13889em;">P</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07847em;">X</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31166399999999994em;"><span style="top:-2.5500000000000003em;margin-left:-0.07847em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">i</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>然后最大化这种后验概率。</p>
 <p data-line="81" class="code-line"><strong>支持向量机</strong>是一种监督学习模型，可用于分类和回归。 SVM将每个输入样本映射为空间中的点，并构造超平面或超平面集，以便每个类的样本除以明确的间隙。然后将新样本映射到空间中并基于平面之间的间隙预测属于特定类。</p>
-<p data-line="83" class="code-line"><img src="vscode-resource:/Users/mayuanchao/workspace/MLND/Toxic-Comment-Classifier/pics/494px-SVM_margin.png" alt="" class="loading" id="image-hash-3d43e0213b3bc8059eab96f4f1aa071c121f0cdd5a51459b7c89607b1aee678e"></p>
+<p data-line="83" class="code-line"><img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/494px-SVM_margin.png?raw=true" alt="" class="loading" id="image-hash-ed05381cd17b1a44c16a016b89341919d938e587b9ec99bbc845338669771f1a"></p>
 <p data-line="85" class="code-line">结合NB和SVM分类器并且工作得相当好的算法是NBSVM[10]，它将用作基线模型。</p>
 <p data-line="87" class="code-line">为了解决这个问题，我们也可以使用神经网络。神经网络是一层互连的节点，其中包含类似于人类大脑神经元的激活功能。神经网络通过输入层接收输入作为数字，并将输入传递给处理它的隐藏层。隐藏层可以是多个层。每层中的每个节点都有一个权重，节点将输入与权重相乘以得到输出。然后输出层提供单个数字，该数字基于激活函数提供概率或类。通过为每个节点分配随机权重来训练网络，并且网络自动调整权重以使预测接近实际输出。</p>
-<p data-line="89" class="code-line"><img src="vscode-resource:/Users/mayuanchao/workspace/MLND/Toxic-Comment-Classifier/pics/220px-Neural_network_example.svg.png" alt="" class="loading" id="image-hash-5d651519663d98000618d268e802c8445324964c9b479caabc4dcb33443752b1"></p>
+<p data-line="89" class="code-line"><img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/220px-Neural_network_example.svg.png?raw=true" alt="" class="loading" id="image-hash-e7d93176c4bbdfb997d518fd2f5560dc8862a19b00fb35eccf59e597a520582b"></p>
 <p data-line="91" class="code-line">在我们的例子中，网络的输入是转换成数字形式的文本，其中每个单词输入到节点，输出层包含6个节点，表示6个输出类型的概率。</p>
 <p data-line="93" class="code-line">然而，这些模型和其他反馈模型（如CNN）的问题是它们不跟踪顺序数据，即它们不跟踪句子中单词的上下文，并且它们对于长文本表现不佳和它们倾向于过度训练数据。</p>
 <p data-line="95" class="code-line">为了克服这个问题，我使用了递归神经网络（RNN）。在递归神经网络中，每个节点具有反馈回路，该回路在给定时间步长处获取先前输入。这允许RNN展示时间序列的时间动态行为。 RNN具有短期存储器，允许其基于节点的权重和先前的输入决策来确定当前输入。如下所示，反馈环路使用前n个输入序列的输入处理输入。</p>
-<p data-line="97" class="code-line"><img src="vscode-resource:/Users/mayuanchao/workspace/MLND/Toxic-Comment-Classifier/pics/640px-Recurrent_neural_network_unfold.svg.png" alt="" class="loading" id="image-hash-5b8da2ffd649f5d304f4e9bd60b8e0fd266823106eac8fa36be6007c69688c92"></p>
+<p data-line="97" class="code-line"><img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/640px-Recurrent_neural_network_unfold.svg.png?raw=true" alt="" class="loading" id="image-hash-e1f9c9969163b8f848d4bed428d1fb405911dff6600c6b99960d07739b0126cc"></p>
 <p data-line="99" class="code-line">长短期记忆网络[11]是一种回归神经网络算法，是一种专为自然语言处理而设计的算法，经证明可以很好地运行，并且可以作为解决方案的基础。LSTM网络克服了传统RNN无法从长时间运行的顺序数据中获取上下文信息的缺点，它可以记住长时间的重要信息。</p>
 <p data-line="101" class="code-line">LSTM单元如下所示。每个单元有3个门：输入门，输出门和遗忘门。门由S形和矢量运算表示。输入门决定需要在单元状态中存储哪些新信息。遗忘门如果不重要则删除旧信息，输出门使输入影响当前时间步的输出。每个门都是一个输出在0和1之间的sigmoid层，其中0表示不通过，1表示让一切通过。</p>
-<p data-line="103" class="code-line"><img src="vscode-resource:/Users/mayuanchao/workspace/MLND/Toxic-Comment-Classifier/pics/LSTM3-chain.png" alt="" class="loading" id="image-hash-9e68a0206dc4cd6340688875387bd2d70ddf299953a4d766930144e9012a583c"></p>
+<p data-line="103" class="code-line"><img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/LSTM3-chain.png?raw=true" alt="" class="loading" id="image-hash-3566b6f7c368d694ecaa9941ab595610a1b740897c2a5ef0e0cdd7d98f433bbd"></p>
 <p data-line="105" class="code-line">LSTM单元有3个输入：输入样本<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>x</mi></mrow><annotation encoding="application/x-tex">x</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">x</span></span></span></span></eq>在<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>t</mi></mrow><annotation encoding="application/x-tex">t</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.61508em;vertical-align:0em;"></span><span class="mord mathdefault">t</span></span></span></span></eq>时刻<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><msub><mi>x</mi><mi>t</mi></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">(x_t)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">x</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.2805559999999999em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">t</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>，前一个LSTM单元格的记忆<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><msub><mi>C</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">(C_{t-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault" style="margin-right:0.07153em;">C</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:-0.07153em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>，前一个LSTM单元格的输出<eq><span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>(</mo><msub><mi>h</mi><mrow><mi>t</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo></mrow><annotation encoding="application/x-tex">(h_{t-1})</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.301108em;"><span style="top:-2.5500000000000003em;margin-left:0em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">t</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.208331em;"><span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></eq>，</p>
 <p data-line="107" class="code-line">LSTM单元完成的步骤：</p>
 <ol>
@@ -125,10 +125,10 @@
 <li data-line="143" class="code-line">定义模型并定义模型的各个层。我定义的模型以词嵌入向量作为输入，接着是LSTM层和CNN层。输出层使用sigmoid作为激活函数。</li>
 <li data-line="144" class="code-line">使用AUROC作为度量标准来训练和测试模型。</li>
 </ol>
-<h3 id="e59fbae58786e6a8a1e59e8b-4" data-line="146" class="code-line">基准模型</h3>
+<h3 id="e59fbae58786e6a8a1e59e8b-2" data-line="146" class="code-line">基准模型</h3>
 <p data-line="147" class="code-line">SVM是最常用的文本分类算法之一，可用作基准模型。基于SVM和朴素贝叶斯算法的SVMNB[6]，它提供了比传统SVM更好的性能，是在kaggle比赛中的推荐的benchmark，我将使用SVMNB作为我的benchmark model。</p>
-<h2 id="iii-e696b9e6b395-4" data-line="149" class="code-line">III. 方法</h2>
-<h3 id="e695b0e68daee9a284e5a484e79086-4" data-line="150" class="code-line">数据预处理</h3>
+<h2 id="iii-e696b9e6b395-2" data-line="149" class="code-line">III. 方法</h2>
+<h3 id="e695b0e68daee9a284e5a484e79086-2" data-line="150" class="code-line">数据预处理</h3>
 <p data-line="151" class="code-line">Jigsaw提供的维基媒体评论数据大多是干净的，没有任何空值。但正如上一节所述，数据存在类不平衡问题。大多数数据都很干净，甚至在有毒数据中也有一些类别。但是，选择的度量标准AUROC不受此类不平衡问题的影响。</p>
 <p data-line="153" class="code-line">在数据集上完成的预处理步骤是：</p>
 <ol>
@@ -141,7 +141,7 @@
 </ol>
 <p data-line="161" class="code-line">这些预处理步骤显著减小了输入的大小。</p>
 <p data-line="163" class="code-line">完成此操作后，需要将文本数据编码为数值。使用词嵌入稠密的向量表示。如前所述，选择FastText预训练嵌入作为嵌入层。</p>
-<h3 id="e689a7e8a18ce8bf87e7a88b-4" data-line="164" class="code-line">执行过程</h3>
+<h3 id="e689a7e8a18ce8bf87e7a88b-2" data-line="164" class="code-line">执行过程</h3>
 <p data-line="165" class="code-line">模型描述：</p>
 <ol>
 <li data-line="166" class="code-line">输入层接受长度为100的单词索引列表（如在上一节中所述，每个注释都被转换为长度为100的向量）。</li>
@@ -184,36 +184,229 @@ x = concatenate([avg_pool, max_pool])
 <ol start="8">
 <li data-line="197" class="code-line">输出层有6个节点，并应用sigmoid函数来获得6个输出标签的预测。</li>
 </ol>
-<p data-line="200" class="code-line">我使用二元交叉熵作为损失函数来训练模型，并且在2个中批量大小为1280来优化和训练模型。使用具有1280个cuda核的Gtx 1060来训练模型。
-模型实现的代码很简单，代码通过跟踪keras和scikit-learn文档来完成，其中包含用于实现模型，度量，交叉验证和嵌入的详细文档。最难的部分是建立环境，安装keras然后尝试nvidia-docker，而不是手动安装所有东西，因为一切都在本地机器（使用Gtx 1060显卡的笔记本电脑）完成。</p>
-<h3 id="e5ae8ce59684-4" data-line="202" class="code-line">完善</h3>
-<h2 id="iv-e7bb93e69e9c-4" data-line="204" class="code-line">IV. 结果</h2>
-<h3 id="e6a8a1e59e8be79a84e8af84e4bbb7e4b88ee9aa8ce8af81-4" data-line="205" class="code-line">模型的评价与验证</h3>
-<h3 id="e59088e79086e680a7e58886e69e90-4" data-line="206" class="code-line">合理性分析</h3>
-<h2 id="v-e9a1b9e79baee7bb93e8aeba-4" data-line="208" class="code-line">V. 项目结论</h2>
-<h3 id="e7bb93e69e9ce58fafe8a786e58c96-4" data-line="209" class="code-line">结果可视化</h3>
-<h3 id="e5afb9e9a1b9e79baee79a84e6809de88083-4" data-line="210" class="code-line">对项目的思考</h3>
-<h3 id="e99c80e8a681e5819ae587bae79a84e694b9e8bf9b-4" data-line="211" class="code-line">需要做出的改进</h3>
-<h3 id="reference-4" data-line="214" class="code-line">Reference</h3>
+<p data-line="200" class="code-line">使用二元交叉熵作为损失函数，以及adam算法来训练模型。模型实现的代码很简单，代码通过查看keras和scikit-learn文档来完成，其中包含用于实现模型，度量，交叉验证和嵌入的详细文档。环境使用的是Udacity中的GPU训练环。</p>
+<h3 id="e5ae8ce59684-2" data-line="201" class="code-line">完善</h3>
+<p data-line="202" class="code-line">该模型最初是一个简单的LSTM模型，没有使用嵌入向量，没有使用预处理方法，AUROC达到了96.7%。</p>
+<p data-line="204" class="code-line">对模型优化步骤如下：</p>
 <ol>
-<li data-line="215" class="code-line"><a href="http://fortune.com/2018/03/22/human-moderators-facebook-youtube-twitter/">http://fortune.com/2018/03/22/human-moderators-facebook-youtube-twitter/</a></li>
-<li data-line="216" class="code-line"><a href="https://www.theguardian.com/science/brain-flapping/2014/sep/12/comment-sections-toxic-moderation">https://www.theguardian.com/science/brain-flapping/2014/sep/12/comment-sections-toxic-moderation</a></li>
-<li data-line="217" class="code-line"><a href="http://crowdsourcing-class.org/assignments/downloads/pak-paroubek.pdf">http://crowdsourcing-class.org/assignments/downloads/pak-paroubek.pdf</a></li>
-<li data-line="218" class="code-line"><a href="https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png">https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png</a></li>
-<li data-line="219" class="code-line"><a href="https://www.researchgate.net/profile/Sepp_Hochreiter/publication/13853244_Long_Short-term_Memory/links/5700e75608aea6b7746a0624/Long-Short-term-Memory.pdf">https://www.researchgate.net/profile/Sepp_Hochreiter/publication/13853244_Long_Short-term_Memory/links/5700e75608aea6b7746a0624/Long-Short-term-Memory.pdf</a></li>
-<li data-line="220" class="code-line"><a href="https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf">https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf</a></li>
-<li data-line="221" class="code-line"><a href="http://alexkong.net/2013/06/introduction-to-auc-and-roc/">http://alexkong.net/2013/06/introduction-to-auc-and-roc/</a></li>
-<li data-line="222" class="code-line"><a href="https://zh.wikipedia.org/wiki/ROC%E6%9B%B2%E7%BA%BF">https://zh.wikipedia.org/wiki/ROC曲线</a></li>
-<li data-line="223" class="code-line"><a href="https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf">https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf</a></li>
-<li data-line="224" class="code-line"><a href="https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf">Baselines and Bigrams</a></li>
-<li data-line="225" class="code-line"><a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory">Long Short Term Memory</a></li>
-<li data-line="226" class="code-line"><a href="https://nlp.stanford.edu/projects/glove/">gloVe</a></li>
-<li data-line="227" class="code-line"><a href="https://arxiv.org/abs/1607.04606">Enriching Word Vectors with Subword Information</a></li>
-<li data-line="228" class="code-line"><a href="https://arxiv.org/abs/1712.09405">Advances in Pre-Training Distributed Word Representations</a></li>
-<li data-line="229" class="code-line"><a href="https://fasttext.cc/">fastText</a></li>
-<li data-line="230" class="code-line"><a href="https://maxwell.ict.griffith.edu.au/spl/publications/papers/ieeesp97_schuster.pdf">Bidirectional Recurrent Neural Networks</a></li>
-<li data-line="231" class="code-line"><a href="vscode-resource:/Users/mayuanchao/workspace/MLND/Toxic-Comment-Classifier/ftp:/ftp.idsia.ch/pub/juergen/nn_2005.pdf">Framewise Phoneme Classification with Bidirectional LSTM and Other Neural Network Architectures</a></li>
-<li data-line="232" class="code-line"><a href="https://www.academia.edu/35947062/Twitter_Sentiment_Analysis_using_combined_LSTM-CNN_Models">Twitter Sentiment Analysis using combined LSTM-CNN Models</a></li>
+<li data-line="205" class="code-line">完成数据预处理，包括删除符号和数字，用词干替换单词，删除单词；</li>
+<li data-line="206" class="code-line">尝试了几个word2vec库，例如gloVe和fastText，在对比准确率和AUROC指标的情况下，在最终模型中选择了fastText。</li>
+<li data-line="207" class="code-line">限制输入向量的长度为100。</li>
+<li data-line="208" class="code-line">输入bidirectional层设置120个单元，cnn层设置60个filter，步长为3，添加空间dropout层和全局dropout层，dropout=0.2。这些值是通过对各种输入参数重复训练模型来确定的，会在下一节中介绍。</li>
+<li data-line="209" class="code-line">数据在128k样本上进行训练，并在32k样本上进行验证。测试数据包含64k样本。训练在2个epoch后完成，批量大小为1280。使用更多的epoch会导致过拟合，训练损失和验证损失之间的差异增加。</li>
+<li data-line="210" class="code-line">模型使用k折交叉验证进行交叉验证（k=10），在以下参数集合中选择最佳的参数：lstm的cell大小（30,60,90,120），cnn层filter（30,60），cnn步长（2,3）和dropout（0.1,0.2,0.3）。</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th style="text-align:left">Model</th>
+<th style="text-align:left">AUROC</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">LSTM without embedding &amp; preprocessing</td>
+<td style="text-align:left">0.9515</td>
+</tr>
+<tr>
+<td style="text-align:left">LSTM without embedding &amp; with preprocessing</td>
+<td style="text-align:left">0.9570</td>
+</tr>
+<tr>
+<td style="text-align:left">LSTM with gloVe embedding &amp; preprocessing</td>
+<td style="text-align:left">0.9531</td>
+</tr>
+<tr>
+<td style="text-align:left">LSTM with fastText embedding &amp; preprocessing</td>
+<td style="text-align:left">0.9721</td>
+</tr>
+</tbody>
+</table>
+<p data-line="219" class="code-line">最终模型的AUROC得分为97.70％，远优于基准模型，得分为73.9％</p>
+<h2 id="iv-e7bb93e69e9c-2" data-line="221" class="code-line">IV. 结果</h2>
+<h3 id="e6a8a1e59e8be79a84e8af84e4bbb7e4b88ee9aa8ce8af81-2" data-line="222" class="code-line">模型的评价与验证</h3>
+<p data-line="223" class="code-line">下面给出了各种度量的模型测试结果：</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">Toxic</th>
+<th style="text-align:left">Severely Toxic</th>
+<th style="text-align:left">Obscene</th>
+<th style="text-align:left">Threat</th>
+<th style="text-align:left">Insult</th>
+<th style="text-align:left">Identity Hate</th>
+<th style="text-align:left">Overall</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">AUROC</td>
+<td style="text-align:left">0.9563</td>
+<td style="text-align:left">0.9856</td>
+<td style="text-align:left">0.9707</td>
+<td style="text-align:left">0.9814</td>
+<td style="text-align:left">0.9618</td>
+<td style="text-align:left">0.9768</td>
+<td style="text-align:left">0.9721</td>
+</tr>
+<tr>
+<td style="text-align:left">Accuracy</td>
+<td style="text-align:left">0.9155</td>
+<td style="text-align:left">0.9927</td>
+<td style="text-align:left">0.9553</td>
+<td style="text-align:left">0.9962</td>
+<td style="text-align:left">0.9525</td>
+<td style="text-align:left">0.9900</td>
+<td style="text-align:left">0.8698</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:left">0.9381</td>
+<td style="text-align:left">0.9931</td>
+<td style="text-align:left">0.9618</td>
+<td style="text-align:left">0.9961</td>
+<td style="text-align:left">0.9592</td>
+<td style="text-align:left">0.9897</td>
+<td style="text-align:left">0.5464</td>
+</tr>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:left">0.9155</td>
+<td style="text-align:left">0.9927</td>
+<td style="text-align:left">0.9553</td>
+<td style="text-align:left">0.9962</td>
+<td style="text-align:left">0.9524</td>
+<td style="text-align:left">0.9900</td>
+<td style="text-align:left">0.7459</td>
+</tr>
+<tr>
+<td style="text-align:left">F1 Score</td>
+<td style="text-align:left">0.9232</td>
+<td style="text-align:left">0.9929</td>
+<td style="text-align:left">0.9578</td>
+<td style="text-align:left">0.9961</td>
+<td style="text-align:left">0.9553</td>
+<td style="text-align:left">0.9899</td>
+<td style="text-align:left">0.6283</td>
+</tr>
+</tbody>
+</table>
+<p data-line="232" class="code-line">前6列表示每个label的指标。最后一列表示所有标签的加权平均值。基于子集精度的多标签分类的sklearn指标，其匹配每个标签的精确标签。这导致精确度，f1得分，精确度和召回率显着降低。但是，个别分类成绩仍然很高。</p>
+<p data-line="234" class="code-line">模型使用k-fold交叉验证验证模型，k=10。</p>
+<p data-line="236" class="code-line">在k-fold交叉验证中，原始样本被随机分成k份相等大小的子样本。在k个子样本中，保留1个子样本作为用于测试模型的验证数据，并且剩余的k-1个子样本用作训练数据。然后将交叉验证过程重复k次，其中每k个子样本仅使用一次作为验证数据。然后可以对k个结果求平均以产生单个估计。该方法优于重复随机子采样的优点是所有观察都用于训练和验证，并且每个观察仅用于验证一次。</p>
+<p data-line="238" class="code-line">下图显示了各种参数k = 10倍的训练和验证准确度和损失。
+<img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/30.png?raw=true" alt="" class="loading" id="image-hash-c26ad83dd1bc2fbddb2ab08a55a7931a3121b1c470a20cecd7de2baa764fee2e"></p>
+<ul>
+<li data-line="240" class="code-line">Mean of validation loss : 0.058834951277546656</li>
+<li data-line="241" class="code-line">Variance of validation loss : 0.00012065656784282981</li>
+<li data-line="242" class="code-line">Mean of validation accuracy : 0.9801671659953083</li>
+<li data-line="243" class="code-line">Variance of validation accuracy : 9.68356868005733e-06</li>
+</ul>
+<p data-line="245" class="code-line"><img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/60.png?raw=true" alt="" class="loading" id="image-hash-4d9fc732fb79ed1bef2d6afe4c2bfcb1c8c8b4050923cf44647811887b2f1ae7"></p>
+<ul>
+<li data-line="246" class="code-line">Mean of validation loss : 0.05706344353535009</li>
+<li data-line="247" class="code-line">Variance of validation loss : 5.0135825168220734e-05</li>
+<li data-line="248" class="code-line">Mean of validation accuracy : 0.9804300261667311</li>
+<li data-line="249" class="code-line">Variance of validation accuracy : 8.413672602476248e-06</li>
+</ul>
+<p data-line="251" class="code-line"><img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/90.png?raw=true" alt="" class="loading" id="image-hash-f8be9804f5d55c1d020d6d073a99cfb4e19377035dcdf0c006b8f8d38e42977d"></p>
+<ul>
+<li data-line="252" class="code-line">Mean of validation loss : 0.05613930753644884</li>
+<li data-line="253" class="code-line">Variance of validation loss : 4.228854554445845e-05</li>
+<li data-line="254" class="code-line">Mean of validation accuracy : 0.9811872583656547</li>
+<li data-line="255" class="code-line">Variance of validation accuracy : 1.4784551311087157e-06</li>
+</ul>
+<p data-line="257" class="code-line"><img src="https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/120.png?raw=true" alt="" class="loading" id="image-hash-524564cd756db0c3abd7679ce1a0c63f9958af8f28aa33551811c7cba4bcf98e"></p>
+<ul>
+<li data-line="258" class="code-line">Mean of validation loss : 0.05417640228897693</li>
+<li data-line="259" class="code-line">Variance of validation loss : 2.7418915412924683e-05</li>
+<li data-line="260" class="code-line">Mean of validation accuracy : 0.9815063959056527</li>
+<li data-line="261" class="code-line">Variance of validation accuracy : 7.306275900144301e-07</li>
+</ul>
+<p data-line="263" class="code-line">根据以上数据，最终模型参数的选择为：lstm=120，cnn=60,3，dropout=0.3。但是，最后两个模型在每个指标中都非常接近。</p>
+<h3 id="e59088e79086e680a7e58886e69e90-2" data-line="265" class="code-line">合理性分析</h3>
+<p data-line="266" class="code-line">最终的模型得分比基准模型好得多。然而，它没有比未经优化的简单lstm模型好多少。</p>
+<table>
+<thead>
+<tr>
+<th style="text-align:left"></th>
+<th style="text-align:left">Bechmark Model</th>
+<th style="text-align:left">Final Model</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">AUROC</td>
+<td style="text-align:left">0.7621</td>
+<td style="text-align:left">0.9721</td>
+</tr>
+<tr>
+<td style="text-align:left">Accuracy</td>
+<td style="text-align:left">0.8813</td>
+<td style="text-align:left">0.8698</td>
+</tr>
+<tr>
+<td style="text-align:left">Precision</td>
+<td style="text-align:left">0.6276</td>
+<td style="text-align:left">0.5464</td>
+</tr>
+<tr>
+<td style="text-align:left">Recall</td>
+<td style="text-align:left">0.6578</td>
+<td style="text-align:left">0.7459</td>
+</tr>
+<tr>
+<td style="text-align:left">F1 score</td>
+<td style="text-align:left">0.6337</td>
+<td style="text-align:left">0.6283</td>
+</tr>
+</tbody>
+</table>
+<p data-line="275" class="code-line">与验证数据相比，最终模型要好得多。最终模型的AUROC评分为0.97。此外，每个预测大约需要10-30毫秒，这非常快，因此该模型可以在浏览器插件中实时使用，用于实时对评论进行验证和过滤。</p>
+<h2 id="v-e9a1b9e79baee7bb93e8aeba-2" data-line="277" class="code-line">V. 项目结论</h2>
+<h3 id="e5afb9e9a1b9e79baee79a84e6809de88083-2" data-line="278" class="code-line">对项目的思考</h3>
+<p data-line="279" class="code-line">在进行该项目的过程中学习到了很多，可总结如下：</p>
+<ol>
+<li data-line="280" class="code-line">学会用公共数据集来处理相关的问题</li>
+<li data-line="281" class="code-line">数据的预处理</li>
+<li data-line="282" class="code-line">了解了可用于解决特定问题的各种可能的处理方案和模型</li>
+<li data-line="283" class="code-line">设计benchmark，及其作用</li>
+<li data-line="284" class="code-line">基于对各种模型的评估，设计了模型的最终架构</li>
+<li data-line="285" class="code-line">用数据训练模型</li>
+<li data-line="286" class="code-line">使用词嵌入优化模型</li>
+</ol>
+<p data-line="288" class="code-line">另外，我借此机会使用经过实践验证的预处理技术以及较新的word2vec技术，不仅可以标记文本，还可以尝试让我们的模型推断出单词和短语的重要性。我们还尝试使用一些sklearn以及keras的算法包来构建我们的模型。</p>
+<p data-line="290" class="code-line">经过这个项目，激发了我对NLP和情感分析领域的研究的兴趣，另外，全世界也有许多个人和团队正在使用一些经典和新技术来解决各种各样的NLP问题。深度神经网络，词嵌入向量，bert等预处理技术都给NLP领域带来了很大的发展。</p>
+<p data-line="292" class="code-line">项目中最难的部分是尝试开发有效的自动化处理流程。在整个项目中，由于时间的的限制，我没有实践尝试开发更有效的处理流程。例如，通过使用并发可以显着加快一些预处理步骤，但是jupyter notebook并不支持并发。</p>
+<p data-line="294" class="code-line">最终，我的模型确实符合我对问题解决方案的期望。该模型能否应该用于更一般的环境？模型是否有更好的泛化能力？是否有可能提高模型的准确性？这些问题都待我后续思考和解决。</p>
+<h3 id="e99c80e8a681e5819ae587bae79a84e694b9e8bf9b-2" data-line="296" class="code-line">需要做出的改进</h3>
+<p data-line="297" class="code-line">在解决这个问题时，我发现有几个方面可以改进。</p>
+<ol>
+<li data-line="298" class="code-line">使用网格搜索，更系统的构建网络并执行超参数调整。我们认为我们的CNN和RNN在解决我们的问题方面具有更大的潜力，并且通过使用网格搜索技术和更多访问支持GPU的机器，我们可以极大地提高模型的性能。</li>
+<li data-line="299" class="code-line">可以使用Attention技术，BERT预处理等技术来优化模型。</li>
+<li data-line="300" class="code-line">模型仅使用维基百科的有限数据进行训练。可以增加更多数据来源和语言类型来对模型进行训练。</li>
+</ol>
+<h3 id="reference-2" data-line="303" class="code-line">Reference</h3>
+<ol>
+<li data-line="304" class="code-line"><a href="http://fortune.com/2018/03/22/human-moderators-facebook-youtube-twitter/">http://fortune.com/2018/03/22/human-moderators-facebook-youtube-twitter/</a></li>
+<li data-line="305" class="code-line"><a href="https://www.theguardian.com/science/brain-flapping/2014/sep/12/comment-sections-toxic-moderation">https://www.theguardian.com/science/brain-flapping/2014/sep/12/comment-sections-toxic-moderation</a></li>
+<li data-line="306" class="code-line"><a href="http://crowdsourcing-class.org/assignments/downloads/pak-paroubek.pdf">http://crowdsourcing-class.org/assignments/downloads/pak-paroubek.pdf</a></li>
+<li data-line="307" class="code-line"><a href="https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png">https://github.com/udacity/cn-machine-learning/blob/master/toxic-comment-classification/pics/hist.png</a></li>
+<li data-line="308" class="code-line"><a href="https://www.researchgate.net/profile/Sepp_Hochreiter/publication/13853244_Long_Short-term_Memory/links/5700e75608aea6b7746a0624/Long-Short-term-Memory.pdf">https://www.researchgate.net/profile/Sepp_Hochreiter/publication/13853244_Long_Short-term_Memory/links/5700e75608aea6b7746a0624/Long-Short-term-Memory.pdf</a></li>
+<li data-line="309" class="code-line"><a href="https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf">https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf</a></li>
+<li data-line="310" class="code-line"><a href="http://alexkong.net/2013/06/introduction-to-auc-and-roc/">http://alexkong.net/2013/06/introduction-to-auc-and-roc/</a></li>
+<li data-line="311" class="code-line"><a href="https://zh.wikipedia.org/wiki/ROC%E6%9B%B2%E7%BA%BF">https://zh.wikipedia.org/wiki/ROC曲线</a></li>
+<li data-line="312" class="code-line"><a href="https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf">https://github.com/Kirupakaran/Toxic-comments-classification/blob/master/proposal.pdf</a></li>
+<li data-line="313" class="code-line"><a href="https://nlp.stanford.edu/pubs/sidaw12_simple_sentiment.pdf">Baselines and Bigrams</a></li>
+<li data-line="314" class="code-line"><a href="https://www.researchgate.net/publication/13853244_Long_Short-term_Memory">Long Short Term Memory</a></li>
+<li data-line="315" class="code-line"><a href="https://nlp.stanford.edu/projects/glove/">gloVe</a></li>
+<li data-line="316" class="code-line"><a href="https://arxiv.org/abs/1607.04606">Enriching Word Vectors with Subword Information</a></li>
+<li data-line="317" class="code-line"><a href="https://arxiv.org/abs/1712.09405">Advances in Pre-Training Distributed Word Representations</a></li>
+<li data-line="318" class="code-line"><a href="https://fasttext.cc/">fastText</a></li>
+<li data-line="319" class="code-line"><a href="https://maxwell.ict.griffith.edu.au/spl/publications/papers/ieeesp97_schuster.pdf">Bidirectional Recurrent Neural Networks</a></li>
+<li data-line="320" class="code-line"><a href="vscode-resource:/Users/mayuanchao/workspace/MLND/Toxic-Comment-Classifier/ftp:/ftp.idsia.ch/pub/juergen/nn_2005.pdf">Framewise Phoneme Classification with Bidirectional LSTM and Other Neural Network Architectures</a></li>
+<li data-line="321" class="code-line"><a href="https://www.academia.edu/35947062/Twitter_Sentiment_Analysis_using_combined_LSTM-CNN_Models">Twitter Sentiment Analysis using combined LSTM-CNN Models</a></li>
 </ol>
 
 </body></html>

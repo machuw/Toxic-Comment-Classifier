@@ -64,7 +64,7 @@ csv文件的数据格式为：
 ![](pics/Exploration-1.png)
 
 下图显示了训练集中每条评论的单词数。正如我们所看到的，大多数评论都有0到100个单词。去重后单词数小于或等于100的评论占比为97%。
-![](pics/Exploration-2.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/Exploration-2.png?raw=true)
 
 ### 探索性可视化
 
@@ -81,13 +81,13 @@ $$P(w_j|X_i) = \frac{P(X_i|w_j) \cdot P(w_j)}{P(X_i)}$$
 
 **支持向量机**是一种监督学习模型，可用于分类和回归。 SVM将每个输入样本映射为空间中的点，并构造超平面或超平面集，以便每个类的样本除以明确的间隙。然后将新样本映射到空间中并基于平面之间的间隙预测属于特定类。
 
-![](pics/494px-SVM_margin.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/494px-SVM_margin.png?raw=true)
 
 结合NB和SVM分类器并且工作得相当好的算法是NBSVM[10]，它将用作基线模型。
 
 为了解决这个问题，我们也可以使用神经网络。神经网络是一层互连的节点，其中包含类似于人类大脑神经元的激活功能。神经网络通过输入层接收输入作为数字，并将输入传递给处理它的隐藏层。隐藏层可以是多个层。每层中的每个节点都有一个权重，节点将输入与权重相乘以得到输出。然后输出层提供单个数字，该数字基于激活函数提供概率或类。通过为每个节点分配随机权重来训练网络，并且网络自动调整权重以使预测接近实际输出。
 
-![](pics/220px-Neural_network_example.svg.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/220px-Neural_network_example.svg.png?raw=true)
 
 在我们的例子中，网络的输入是转换成数字形式的文本，其中每个单词输入到节点，输出层包含6个节点，表示6个输出类型的概率。
 
@@ -95,13 +95,13 @@ $$P(w_j|X_i) = \frac{P(X_i|w_j) \cdot P(w_j)}{P(X_i)}$$
 
 为了克服这个问题，我使用了递归神经网络（RNN）。在递归神经网络中，每个节点具有反馈回路，该回路在给定时间步长处获取先前输入。这允许RNN展示时间序列的时间动态行为。 RNN具有短期存储器，允许其基于节点的权重和先前的输入决策来确定当前输入。如下所示，反馈环路使用前n个输入序列的输入处理输入。
 
-![](pics/640px-Recurrent_neural_network_unfold.svg.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/640px-Recurrent_neural_network_unfold.svg.png?raw=true)
 
 长短期记忆网络[11]是一种回归神经网络算法，是一种专为自然语言处理而设计的算法，经证明可以很好地运行，并且可以作为解决方案的基础。LSTM网络克服了传统RNN无法从长时间运行的顺序数据中获取上下文信息的缺点，它可以记住长时间的重要信息。
 
 LSTM单元如下所示。每个单元有3个门：输入门，输出门和遗忘门。门由S形和矢量运算表示。输入门决定需要在单元状态中存储哪些新信息。遗忘门如果不重要则删除旧信息，输出门使输入影响当前时间步的输出。每个门都是一个输出在0和1之间的sigmoid层，其中0表示不通过，1表示让一切通过。
 
-![](pics/LSTM3-chain.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/LSTM3-chain.png?raw=true)
 
 LSTM单元有3个输入：输入样本$x$在$t$时刻$(x_t)$，前一个LSTM单元格的记忆$(C_{t-1})$，前一个LSTM单元格的输出$(h_{t-1})$，
 
@@ -237,25 +237,25 @@ Jigsaw提供的维基媒体评论数据大多是干净的，没有任何空值�
 在k-fold交叉验证中，原始样本被随机分成k份相等大小的子样本。在k个子样本中，保留1个子样本作为用于测试模型的验证数据，并且剩余的k-1个子样本用作训练数据。然后将交叉验证过程重复k次，其中每k个子样本仅使用一次作为验证数据。然后可以对k个结果求平均以产生单个估计。该方法优于重复随机子采样的优点是所有观察都用于训练和验证，并且每个观察仅用于验证一次。
 
 下图显示了各种参数k = 10倍的训练和验证准确度和损失。
-![](pics/30.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/30.png?raw=true)
 - Mean of validation loss : 0.058834951277546656
 - Variance of validation loss : 0.00012065656784282981
 - Mean of validation accuracy : 0.9801671659953083
 - Variance of validation accuracy : 9.68356868005733e-06
 
-![](pics/60.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/60.png?raw=true)
 - Mean of validation loss : 0.05706344353535009
 - Variance of validation loss : 5.0135825168220734e-05
 - Mean of validation accuracy : 0.9804300261667311
 - Variance of validation accuracy : 8.413672602476248e-06
 
-![](pics/90.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/90.png?raw=true)
 - Mean of validation loss : 0.05613930753644884
 - Variance of validation loss : 4.228854554445845e-05
 - Mean of validation accuracy : 0.9811872583656547
 - Variance of validation accuracy : 1.4784551311087157e-06
 
-![](pics/120.png)
+![](https://github.com/machuw/Toxic-Comment-Classifier/blob/master/pics/120.png?raw=true)
 - Mean of validation loss : 0.05417640228897693
 - Variance of validation loss : 2.7418915412924683e-05
 - Mean of validation accuracy : 0.9815063959056527
